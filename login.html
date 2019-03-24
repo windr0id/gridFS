@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<link rel="icon" href="assets/images/favicon.png" type="image/png">
+		<title>GridFiles</title>
+		<link href="assets/css/icons.css" rel="stylesheet">
+		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+		<link href="assets/css/style.css" rel="stylesheet">
+		<link href="assets/css/responsive.css" rel="stylesheet">
+		<link href="assets/plugins/jquery-toast/jquery.toast.min.css" rel="stylesheet" type="text/css">
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+          <script src="js/html5shiv.min.js"></script>
+          <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+	</head>
+
+	<body class="sticky-header">
+
+
+		<!--Start login Section-->
+		<section class="login-section">
+			<div class="container">
+				<div class="row">
+					<div class="login-wrapper">
+						<div class="login-inner">
+
+							<div class="logo">
+								<img src="assets/images/logo-dark.png" alt="logo" />
+							</div>
+
+							<h2 class="header-title text-center">用户登录</h2>
+
+							<form>
+								<div class="form-group">
+									<input type="text" class="form-control" placeholder="用户名" name="username" id="username">
+								</div>
+
+								<div class="form-group">
+									<input type="password" class="form-control" placeholder="密码" name="password" id="password">
+								</div>
+
+								<div class="form-group">
+									<div class="pull-left">
+										<div class="checkbox primary">
+											<input id="checkbox-2" type="checkbox">
+											<label for="checkbox-2">记住我</label>
+										</div>
+									</div>
+
+									<div class="pull-right">
+										<a href="/about.html" target="_blank" class="a-link" >
+											<i class="fa fa-unlock-alt"></i> 忘记密码
+										</a>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<input type="button" value="登录" class="btn btn-primary btn-block" onclick="send()">
+								</div>
+
+								<div class="form-group text-center">
+									还没有账户? <a href="/register.html">注册账号</a>
+								</div>
+
+							</form>
+
+							<div class="copy-text">
+								<p class="m-0">2018 &copy; Xidian University</p>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</section>
+		<!--End login Section-->
+
+
+		<script type="text/javascript">
+			function send() {
+				var username = document.getElementById("username").value;
+				var password = document.getElementById("password").value;
+				var xhr = new XMLHttpRequest();
+				xhr.open("post", "/cgi/login", true);
+				xhr.onload = function(evt) {
+					var msg = evt.target.responseText;
+					console.log(msg);
+					if (msg == "ok") {
+						if (document.getElementById("checkbox-2").checked) {
+								refreshCookie();
+						}
+						window.location.href = "/index.html";
+					} else {
+						toast("登录失败", msg);
+					}
+				};
+				data = new FormData();
+				data.append("username", username);
+				data.append("password", password);
+				xhr.send(data);
+			}
+
+			function toast(heading, text) {
+				$.toast().reset('all');
+				$("body").removeAttr('class').removeClass("bottom-center-fullwidth").addClass("top-center-fullwidth");
+				$.toast({
+					heading: heading,
+					text: text,
+					position: 'top-center',
+					loaderBg: '#FFBD4A',
+					icon: 'error',
+					hideAfter: 5000
+				});
+				return false;
+			};
+
+			function refreshCookie(){
+				setCookie("hashcode", getCookie("hashcode"), 30*24*60*60*1000);
+				setCookie("username", getCookie("username"), 30*24*60*60*1000);
+			}
+			
+			function getCookie(name) {
+				var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)"); //正则匹配
+				if (arr = document.cookie.match(reg)) {
+					return unescape(arr[2]);
+				} else {
+					return null;
+				}
+			} 
+			//设置自定义过期时间cookie
+			function setCookie(name, value, msec) {
+				var exp = new Date();
+				exp.setTime(exp.getTime() + msec);
+				document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+			}
+
+		</script>
+
+		<div class="jq-toast-wrap" style="left: 0px; top: 20px;">
+			<div class="jq-toast-single jq-has-icon jq-icon-error" style="text-align: left; display: none;"><span class="jq-toast-loader jq-toast-loaded"
+				 style="-webkit-transition: width 3.1s ease-in;                       -o-transition: width 3.1s ease-in;                       transition: width 3.1s ease-in;                       background-color: #FFBD4A;"></span><span
+				 class="close-jq-toast-single">×</span>
+				<h2 class="jq-toast-heading">top center</h2>Lorem Ipsum is simply dummy text of the printing and typesetting
+			</div>
+		</div>
+
+
+		<!--Begin core plugin -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<!-- End core plugin -->
+		<!-- BEGIN PAGE LEVEL SCRIPTS -->
+		<script src="assets/plugins/jquery-toast/jquery.toast.min.js"></script>
+		<script src="assets/pages/notifications.js"></script>
+		<!-- END PAGE LEVEL SCRIPTS -->
+	</body>
+
+</html>
